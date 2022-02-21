@@ -45,7 +45,7 @@ class Data extends React.Component
     {
         var request = new XMLHttpRequest();
 
-        request.open("GET", "https://koreykitchen.github.io/Mileage-Calculator/SalesRoutesOcalaFL.xlsx", true);
+        request.open("GET", "https://koreykitchen.github.io/Route-Scheduler/SalesRoutesOcalaFL.xlsx", true);
 
         request.responseType = "arraybuffer";
 
