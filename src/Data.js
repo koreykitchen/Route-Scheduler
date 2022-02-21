@@ -29,8 +29,6 @@ class Data extends React.Component
         {
             return (<div>
                     
-                      <p>Select a store to add to your route: </p>
-            
                       <select id='locationSelectElement' style={{width:'75vw'}}>
             
                         {this.state.selectElementOptions}
@@ -63,7 +61,7 @@ class Data extends React.Component
 
         var workbook = XLSX.read(rawData, {type:"array"});
 
-        var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        var worksheet = workbook.Sheets[workbook.SheetNames[1]];
 
         var jsonStoreListData = XLSX.utils.sheet_to_json(worksheet, {blankrows:false});
 
@@ -90,8 +88,10 @@ class Data extends React.Component
                                     }
                                 );
 
-        this.setState({ storeListData: jsonStoreListData, dataHasBeenLoaded: true,
-                         selectElementOptions: this.populateSelectElement()});
+        this.setState({ storeListData: jsonStoreListData, dataHasBeenLoaded: true });
+                         
+
+        this.setState({ selectElementOptions: this.populateSelectElement() });
     }
 
     populateSelectElement()
