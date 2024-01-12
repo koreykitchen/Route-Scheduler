@@ -28,12 +28,20 @@ class Data extends React.Component
         else
         {
             return (<div>
-                    
-                      <select id='locationSelectElement' style={{width:'75vw'}}>
-            
-                        {this.state.selectElementOptions}
-            
-                      </select>
+
+                        <h1>Route Scheduler</h1>
+
+                        <p>A Note Before Using:</p>
+                        
+                        <p>Route scheduler is still in development, and therefore may be prone to bugs and crashes...</p>
+
+                        <p>Some functionality may be missing or incomplete...</p>
+                        
+                        <select id='locationSelectElement' style={{width:'75vw'}}>
+                
+                            {this.state.selectElementOptions}
+                
+                        </select>
             
                     </div>);
         }
@@ -65,9 +73,10 @@ class Data extends React.Component
 
         var jsonStoreListData = XLSX.utils.sheet_to_json(worksheet, {blankrows:false});
 
-        jsonStoreListData = jsonStoreListData.filter(storeObject => (storeObject.Name));
+        jsonStoreListData = jsonStoreListData.filter(storeObject => 
+            ((storeObject["New Route"] === 365)));
 
-        jsonStoreListData = jsonStoreListData.sort((firstStore, secondStore) =>
+/*        jsonStoreListData = jsonStoreListData.sort((firstStore, secondStore) =>
                                     {
                                         var firstStoreName = firstStore.Name.toUpperCase();
                                         var secondStoreName = secondStore.Name.toUpperCase();
@@ -87,9 +96,8 @@ class Data extends React.Component
                                         return comparison;
                                     }
                                 );
-
-        this.setState({ storeListData: jsonStoreListData, dataHasBeenLoaded: true });
-                         
+*/
+        this.setState({ storeListData: jsonStoreListData, dataHasBeenLoaded: true });                    
 
         this.setState({ selectElementOptions: this.populateSelectElement() });
     }
