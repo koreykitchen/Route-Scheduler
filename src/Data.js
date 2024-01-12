@@ -51,7 +51,7 @@ class Data extends React.Component
     {
         var request = new XMLHttpRequest();
 
-        request.open("GET", "https://koreykitchen.github.io/Route-Scheduler/SalesRoutesOcalaFL.xlsx", true);
+        request.open("GET", "https://koreykitchen.github.io/Route-Scheduler/Rt366.xlsx", true);
 
         request.responseType = "arraybuffer";
 
@@ -74,7 +74,7 @@ class Data extends React.Component
         var jsonStoreListData = XLSX.utils.sheet_to_json(worksheet, {blankrows:false});
 
         jsonStoreListData = jsonStoreListData.filter(storeObject => 
-            ((storeObject["New Route"] === 365)));
+            ((storeObject["New Route"] === 366)));
 
 /*        jsonStoreListData = jsonStoreListData.sort((firstStore, secondStore) =>
                                     {
