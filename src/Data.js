@@ -10,7 +10,7 @@ class Data extends React.Component
 
         this.state = { storeListData: [], dataHasBeenLoaded: false, daysArray364: [], weekData: [],
                         stopCount: 0, selectElementOptions: this.populateSelectElement(), 
-                        selectElementIndex: 0 }; 
+                        selectElementIndex: 0, averageDailyStopCount: 0 }; 
 
         this.callbackFunctionToStoreData = this.callbackFunctionToStoreData.bind(this);
         this.getSelectedIndex = this.getSelectedIndex.bind(this);
@@ -53,6 +53,12 @@ class Data extends React.Component
                         {this.state.weekData}
 
                         <p>Total Stops: {this.state.stopCount}</p> 
+
+                        <br/>
+
+                        <br/>
+
+                        <p>Average Daily Stop Count: {this.state.averageDailyStopCount}</p>
             
                     </div>);
         }
@@ -272,7 +278,21 @@ class Data extends React.Component
                 }
             });
 
+        this.calculateData(yearArray);
+
         return yearArray;
+    }
+
+    calculateData(yearArray)
+    {
+        var totalStopCount = 0;
+
+        for(let k = 0; k < 364; k++)
+        {
+            totalStopCount += (yearArray[k].split('\n').length - 1);
+        }
+
+        this.setState({averageDailyStopCount: (totalStopCount/(364-(2*52)))});
     }
 
     formatWeeklyOutput(index)
