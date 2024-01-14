@@ -128,7 +128,7 @@ class Data extends React.Component
                         {
                             yearArray[dayOfMonth+(j*(7*4))] += storeObject.Name;
 
-                            yearArray[dayOfMonth+(j*(7*4))] += '\n';
+                            yearArray[dayOfMonth+(j*(7*4))] += ' - Monthly\n';
                         }
                     }
 
@@ -147,7 +147,7 @@ class Data extends React.Component
                         {
                             yearArray[dayOfMonth+(j*(7*3))] += storeObject.Name;
 
-                            yearArray[dayOfMonth+(j*(7*3))] += '\n';
+                            yearArray[dayOfMonth+(j*(7*3))] += ' - Every 3 Weeks\n';
                         }
                     }
 
@@ -176,7 +176,7 @@ class Data extends React.Component
                         {
                             yearArray[dayOfMonth+(j*(7*2))] += storeObject.Name;
 
-                            yearArray[dayOfMonth+(j*(7*2))] += '\n';
+                            yearArray[dayOfMonth+(j*(7*2))] += ' - Every Other Week\n';
                         }
                     }
 
@@ -196,6 +196,72 @@ class Data extends React.Component
                                 for(let j = 0; j < (52/1); j++)
                                 {
                                     yearArray[dayOfMonth+(j*(7*1))] += storeObject.Name;
+
+                                    var timesAWeek = ''; //Default
+
+                                    if(storeObject.Days.length === 1)
+                                    {
+                                        timesAWeek = "Once a week";
+                                    }
+
+                                    else
+                                    {
+                                        var WeekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+                                        switch(storeObject.Days.at(0))
+                                        {
+                                            case 'M':
+                                                timesAWeek += WeekDays[0];
+                                                break;
+                                            case 'T':
+                                                timesAWeek += WeekDays[1];
+                                                break;
+                                            case 'W':
+                                                timesAWeek += WeekDays[2];
+                                                break;
+                                            case 'R':
+                                                timesAWeek += WeekDays[3];
+                                                break;
+                                            case 'F':
+                                                timesAWeek += WeekDays[4];
+                                                break;
+                                            default:
+                                                timesAWeek += '';
+                                                break;
+                                        }
+
+                                        for(let n = 1; n < storeObject.Days.length; n++)
+                                        {
+                                            timesAWeek += '/';
+
+                                            switch(storeObject.Days.at(n))
+                                            {
+                                                case 'M':
+                                                    timesAWeek += WeekDays[0];
+                                                    break;
+                                                case 'T':
+                                                    timesAWeek += WeekDays[1];
+                                                    break;
+                                                case 'W':
+                                                    timesAWeek += WeekDays[2];
+                                                    break;
+                                                case 'R':
+                                                    timesAWeek += WeekDays[3];
+                                                    break;
+                                                case 'F':
+                                                    timesAWeek += WeekDays[4];
+                                                    break;
+                                                default:
+                                                    timesAWeek += '';
+                                                    break;
+                                            }
+                                        }
+                                        
+                                    }
+
+                                    yearArray[dayOfMonth+(j*(7*1))] += ' - ';
+
+                                    yearArray[dayOfMonth+(j*(7*1))] += timesAWeek;
 
                                     yearArray[dayOfMonth+(j*(7*1))] += '\n';
                                 }
