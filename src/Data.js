@@ -42,6 +42,18 @@ class Data extends React.Component
 
                         <br/>
 
+                        <select id="routeSelect" style={{width:'75vw'}}>
+
+                            <option>RT366</option>
+
+                        </select>
+
+                        <br/>
+
+                        <p>Average Daily Stop Count: {this.state.averageDailyStopCount}</p>
+
+                        <br/>
+
                         <select id='daySelectElement' onChange={this.getSelectedIndex} style={{width:'75vw'}}>
                 
                             {this.state.selectElementOptions}
@@ -58,7 +70,7 @@ class Data extends React.Component
 
                         <br/>
 
-                        <p>Average Daily Stop Count: {this.state.averageDailyStopCount}</p>
+                        
             
                     </div>);
         }
