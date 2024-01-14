@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Route-Scheduler/static/css/main.9b3c545f.css",
-    "main.js": "/Route-Scheduler/static/js/main.c886098f.js",
+    "main.js": "/Route-Scheduler/static/js/main.dd8ccc64.js",
     "index.html": "/Route-Scheduler/index.html",
     "main.9b3c545f.css.map": "/Route-Scheduler/static/css/main.9b3c545f.css.map",
-    "main.c886098f.js.map": "/Route-Scheduler/static/js/main.c886098f.js.map"
+    "main.dd8ccc64.js.map": "/Route-Scheduler/static/js/main.dd8ccc64.js.map"
   },
   "entrypoints": [
     "static/css/main.9b3c545f.css",
-    "static/js/main.c886098f.js"
+    "static/js/main.dd8ccc64.js"
   ]
 }
