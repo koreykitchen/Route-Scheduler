@@ -8,9 +8,12 @@ class Data extends React.Component
     {
         super(props);
 
-        this.state = { storeListData: [], dataHasBeenLoaded: false, selectElementOptions: [] }; 
+        this.state = { storeListData: [], dataHasBeenLoaded: false, daysArray364: [], weekData: [],
+                        stopCount: 0, selectElementOptions: this.populateSelectElement(), 
+                        selectElementIndex: 0 }; 
 
         this.callbackFunctionToStoreData = this.callbackFunctionToStoreData.bind(this);
+        this.getSelectedIndex = this.getSelectedIndex.bind(this);
     }
 
     componentDidMount()
@@ -36,12 +39,20 @@ class Data extends React.Component
                         <p>Route scheduler is still in development, and therefore may be prone to bugs and crashes...</p>
 
                         <p>Some functionality may be missing or incomplete...</p>
-                        
-                        <select id='locationSelectElement' style={{width:'75vw'}}>
+
+                        <br/>
+
+                        <select id='daySelectElement' onChange={this.getSelectedIndex} style={{width:'75vw'}}>
                 
                             {this.state.selectElementOptions}
                 
                         </select>
+
+                        <br/>
+
+                        {this.state.weekData}
+
+                        <p>Total Stops: {this.state.stopCount}</p> 
             
                     </div>);
         }
@@ -69,57 +80,176 @@ class Data extends React.Component
 
         var workbook = XLSX.read(rawData, {type:"array"});
 
-        var worksheet = workbook.Sheets[workbook.SheetNames[1]];
+        var worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
         var jsonStoreListData = XLSX.utils.sheet_to_json(worksheet, {blankrows:false});
 
         jsonStoreListData = jsonStoreListData.filter(storeObject => 
             ((storeObject["New Route"] === 366)));
 
-/*        jsonStoreListData = jsonStoreListData.sort((firstStore, secondStore) =>
-                                    {
-                                        var firstStoreName = firstStore.Name.toUpperCase();
-                                        var secondStoreName = secondStore.Name.toUpperCase();
-
-                                        var comparison = 0;
-
-                                        if (firstStoreName > secondStoreName) 
-                                        {
-                                            comparison = 1;
-                                        } 
-
-                                        else if (firstStoreName < secondStoreName) 
-                                        {
-                                            comparison = -1;
-                                        }
-
-                                        return comparison;
-                                    }
-                                );
-*/
-        this.setState({ storeListData: jsonStoreListData, dataHasBeenLoaded: true });                    
-
+        this.setState({ storeListData: jsonStoreListData, dataHasBeenLoaded: true });  
+        
         this.setState({ selectElementOptions: this.populateSelectElement() });
+
+        this.setState({ daysArray364: this.setYearlySchedule() });
+
+        this.setState({ weekData: this.formatWeeklyOutput(0)});
+
+        this.setState({ stopCount: this.state.daysArray364[this.state.selectElementIndex].split('\n').length - 1});
+    }
+
+    setYearlySchedule()
+    {
+        var weekDays = "MTWRF";
+        var yearArray = [];
+        var dayOfMonth = 0;
+
+        for(let i = 0; i < 364; i++)
+        {
+            yearArray[i] = "";
+        }
+
+        this.state.storeListData.forEach((storeObject) =>
+            {
+                if(storeObject.Name)
+                {
+                    //Monthly
+                    if(storeObject.Frequency === 'M')
+                    {
+                        dayOfMonth = 0;
+
+                        dayOfMonth += ((storeObject.Weeks - 1)*7);
+
+                        dayOfMonth += weekDays.indexOf(storeObject.Days);
+
+                        dayOfMonth += 1;
+
+                        for(let j = 0; j < (52/4); j++)
+                        {
+                            yearArray[dayOfMonth+(j*(7*4))] += storeObject.Name;
+
+                            yearArray[dayOfMonth+(j*(7*4))] += '\n';
+                        }
+                    }
+
+                    //3 Weeks
+                    else if(storeObject.Frequency === "3W")
+                    {
+                        dayOfMonth = 0;
+
+                        dayOfMonth += ((storeObject.Weeks - 1)*7);
+
+                        dayOfMonth += weekDays.indexOf(storeObject.Days);
+
+                        dayOfMonth += 1;
+
+                        for(let j = 0; j < (52/3); j++)
+                        {
+                            yearArray[dayOfMonth+(j*(7*3))] += storeObject.Name;
+
+                            yearArray[dayOfMonth+(j*(7*3))] += '\n';
+                        }
+                    }
+
+                    //2 Weeks
+                    else if(storeObject.Frequency === "B")
+                    {
+                        if(storeObject.Weeks === "EVEN")
+                        {
+                            dayOfMonth = 0;
+
+                            dayOfMonth += weekDays.indexOf(storeObject.Days);
+
+                            dayOfMonth += 1;
+                        }
+
+                        else if(storeObject.Weeks === "ODD")
+                        {
+                            dayOfMonth = 7;
+
+                            dayOfMonth += weekDays.indexOf(storeObject.Days);
+
+                            dayOfMonth += 1;
+                        }
+
+                        for(let j = 0; j < (52/2); j++)
+                        {
+                            yearArray[dayOfMonth+(j*(7*2))] += storeObject.Name;
+
+                            yearArray[dayOfMonth+(j*(7*2))] += '\n';
+                        }
+                    }
+
+                    //Weekly
+                    else if(storeObject.Frequency === "W")
+                    {
+                        for(let k = 0; k < 5; k++)
+                        {
+                            if(storeObject.Days.indexOf(weekDays.charAt(k)) > -1)
+                            {
+                                dayOfMonth = 0;
+
+                                dayOfMonth += k;
+
+                                dayOfMonth += 1;
+
+                                for(let j = 0; j < (52/1); j++)
+                                {
+                                    yearArray[dayOfMonth+(j*(7*1))] += storeObject.Name;
+
+                                    yearArray[dayOfMonth+(j*(7*1))] += '\n';
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            });
+
+        return yearArray;
+    }
+
+    formatWeeklyOutput(index)
+    {
+        return (
+
+            <div>
+       
+                {(this.state.daysArray364[index].split('\n')).map((store, index) => {return <p key={index}>{store}</p>})}
+
+            </div>
+
+        );
     }
 
     populateSelectElement()
     {
-      return this.state.storeListData.map((storeObject, index) => 
-                  {
-                      if(storeObject.Name)
-                      {
-                        return (<option key={index} value={index}>
-                                  {storeObject.Name + ' - ' + storeObject.Address +
-                                    ' - ' + storeObject.City}
-                                </option>);
-                      }
+        return Array(364).fill().map((_, index) =>
+        {
+            var WeekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var specificDay = WeekDays[index%7];
 
-                      else
-                      {
-                        return [];
-                      }
-                  });
+            return (<option key={index} value ={index} >Day #{index} - {specificDay}</option>);
+        });
+    }
 
+    getSelectedIndex()
+    {
+        var selectElement = document.getElementById("daySelectElement");
+
+        if(selectElement)
+        {   
+            var index = selectElement.options[selectElement.selectedIndex].value;
+            
+            this.setState({ selectElementIndex: index});
+            this.setState({ weekData: this.formatWeeklyOutput(index)});
+            this.setState({ stopCount: this.state.daysArray364[index].split('\n').length - 1});
+        }
+
+        else
+        {
+            this.setState({ selectElementIndex: 0});
+        }
     }
 
 }
