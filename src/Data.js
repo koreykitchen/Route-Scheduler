@@ -153,7 +153,7 @@ class Data extends React.Component
                     //3 Weeks
                     else if(storeObject.Frequency === "3W")
                     {
-                        dayOfMonth = 0;
+                        dayOfMonth = 7;
 
                         dayOfMonth += ((storeObject.Weeks - 1)*7);
 
@@ -174,7 +174,7 @@ class Data extends React.Component
                     {
                         if(storeObject.Weeks === "EVEN")
                         {
-                            dayOfMonth = 0;
+                            dayOfMonth = 7;
 
                             dayOfMonth += weekDays.indexOf(storeObject.Days);
 
@@ -183,7 +183,7 @@ class Data extends React.Component
 
                         else if(storeObject.Weeks === "ODD")
                         {
-                            dayOfMonth = 7;
+                            dayOfMonth = 0;
 
                             dayOfMonth += weekDays.indexOf(storeObject.Days);
 
@@ -322,12 +322,16 @@ class Data extends React.Component
 
     populateSelectElement()
     {
+        var date = new Date(2023, 11, 31);
+        var tempDate;
+
         return Array(364).fill().map((_, index) =>
         {
-            var WeekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            var specificDay = WeekDays[index%7];
+            tempDate =new Date(date);
 
-            return (<option key={index} value ={index} >Day #{index} - {specificDay}</option>);
+            date.setDate(date.getDate() + 1);
+
+            return (<option key={index} value ={index} >{tempDate.toDateString()}</option>);
         });
     }
 
